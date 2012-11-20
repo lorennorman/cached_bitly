@@ -1,20 +1,26 @@
 # CachedBitly
 
-An easy Bitly toolkit with Redis being the caching layer.
+An easy bit.ly toolkit with Redis as a caching layer.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'cached_bitly'
+```ruby
+gem 'cached_bitly'
+```
 
 And then execute:
 
-    $ bundle
+```
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install cached_bitly
+```
+$ gem install cached_bitly
+```
 
 ## Usage
 
