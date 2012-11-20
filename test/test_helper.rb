@@ -8,4 +8,10 @@ $LOAD_PATH.unshift dir + '/../lib'
 $TESTING = true
 
 require 'test/unit'
+require 'shoulda-context'
+require 'mocha'
 require 'cached_bitly'
+
+uri = URI.parse(ENV.fetch('GH_REDIS_URL', 'redis://localhost:6139'))
+redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password, :db => 1)
+CachedBitly.redis = redis
