@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = CachedBitly::VERSION
   gem.authors       = ['Garrett Bjerkhoel']
   gem.email         = ['me@garrettbjerkhoel.com']
-  gem.description   = %q{Cache Bitly links.}
-  gem.summary       = %q{Cache Bitly links.}
+  gem.description   = %q{An easy Bitly toolkit with Redis being the caching layer.}
+  gem.summary       = %q{An easy Bitly toolkit with Redis being the caching layer.}
   gem.homepage      = 'https://github.com/dewski/cached_bitly'
 
   gem.files         = `git ls-files`.split($/)
