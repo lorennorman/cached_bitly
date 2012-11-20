@@ -13,7 +13,7 @@ require 'mocha'
 require 'cached_bitly'
 
 if ENV.key?('GH_REDIS_URL')
-  uri = URI.parse(ENV.fetch('GH_REDIS_URL', 'redis://localhost:6139'))
+  uri = URI.parse(ENV['GH_REDIS_URL'])
   redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password, :db => 1)
   CachedBitly.redis = redis
 end
