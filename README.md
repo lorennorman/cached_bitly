@@ -39,9 +39,13 @@ You may also set the bit.ly client directly with your own configuration:
 CachedBitly.bitly_client = Bitly.new('username', 'password')
 ```
 
-There are 2 main methods to interface with bit.ly, the first being just for URLs:
+There are 2 main methods to interface with bit.ly, the first being a way to retreive already generated URLs:
 
 ```ruby
+# First lookup will generate the URL from bit.ly
+CachedBitly.fetch('https://github.com') # => http://bit.ly/WuNWHc
+
+# Hits redis with no additional HTTP request
 CachedBitly.fetch('https://github.com') # => http://bit.ly/WuNWHc
 ```
 
