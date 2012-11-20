@@ -33,6 +33,12 @@ BITLY_LOGIN=dewski
 BITLY_API_KEY=Z_bf4b4fg16991dd72d276e7z9d94d1bc00b
 ```
 
+You may also set the bit.ly client directly with your own configuration:
+
+```ruby
+CachedBitly.bitly_client = Bitly.new('username', 'password')
+```
+
 There are 2 main methods to interface with bit.ly, the first being just for URLs:
 
 ```ruby
