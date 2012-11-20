@@ -12,6 +12,12 @@ class TestCachedBitly < Test::Unit::TestCase
     CachedBitly.bitly_client.stubs(:shorten).returns(response)
   end
 
+  def test_clean_with_whitelisted_urls
+    CachedBitly.allowed_hostnames = ['garrettbjerkhoel.com']
+    content = "<p>Welcome <a href=\"http://garrettbjerkhoel.com\">@dewski</a>!</p>"
+    assert_equal content, CachedBitly.clean(content)
+  end
+
   def test_remote_shorten_url
     stub_remote_bitly
     assert_equal \

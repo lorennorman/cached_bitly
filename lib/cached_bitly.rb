@@ -1,6 +1,7 @@
 require 'cached_bitly/version'
 require 'redis'
 require 'bitly'
+require 'nokogiri'
 
 module CachedBitly
   extend self
@@ -53,7 +54,11 @@ module CachedBitly
   end
 
   def clean(html)
-    doc = html.is_a?(Nokogiri::HTML::Document) ? html : Nokogiri::HTML(html)
+    clean_doc(html).css('body').inner_html
+  end
+
+  def clean_doc(doc)
+    doc = doc.is_a?(Nokogiri::HTML::Document) ? doc : Nokogiri::HTML(doc)
     doc.css('a[href^=http]').each do |link|
       url = link.attributes['href'].value
       if !allowed_hostnames.empty? && !url.match(Regexp.union(*allowed_hostnames))
