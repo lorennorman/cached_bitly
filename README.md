@@ -1,4 +1,5 @@
-# CachedBitly
+CachedBitly [![Build Status](https://secure.travis-ci.org/dewski/cached_bitly.png)](http://travis-ci.org/dewski/cached_bitly)
+===========
 
 An easy bit.ly toolkit with Redis as a caching layer.
 
