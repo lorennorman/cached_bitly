@@ -58,7 +58,7 @@ module CachedBitly
   end
 
   def clean_doc(doc)
-    doc = doc.is_a?(Nokogiri::HTML::Document) ? doc : Nokogiri::HTML(doc)
+    doc = doc.is_a?(String) ? Nokogiri::HTML(doc) : doc
     doc.css('a[href^=http]').each do |link|
       url = link.attributes['href'].value
       if !allowed_hostnames.empty? && url.match(Regexp.union(*allowed_hostnames))
