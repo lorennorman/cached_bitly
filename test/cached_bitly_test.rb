@@ -3,6 +3,8 @@ require 'test_helper'
 class TestCachedBitly < Test::Unit::TestCase
   def setup
     CachedBitly.redis.flushdb
+    CachedBitly.allowed_hostnames = []
+    CachedBitly.stats_enabled = false
   end
 
   def stub_remote_bitly
@@ -13,9 +15,17 @@ class TestCachedBitly < Test::Unit::TestCase
   end
 
   def test_clean_with_whitelisted_urls
+    stub_remote_bitly
     CachedBitly.allowed_hostnames = ['garrettbjerkhoel.com']
     content = "<p>Welcome <a href=\"http://garrettbjerkhoel.com\">@dewski</a>!</p>"
     assert_equal content, CachedBitly.clean(content)
+  end
+
+  def test_clean_without_whitelisted_urls
+    stub_remote_bitly
+    content = "<p>Welcome <a href=\"http://garrettbjerkhoel.com\">@dewski</a>!</p>"
+    rendered_content = "<p>Welcome <a href=\"http://bit.ly/233\">@dewski</a>!</p>"
+    assert_equal rendered_content, CachedBitly.clean(content)
   end
 
   def test_remote_shorten_url

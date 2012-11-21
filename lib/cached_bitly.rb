@@ -61,9 +61,10 @@ module CachedBitly
     doc = doc.is_a?(Nokogiri::HTML::Document) ? doc : Nokogiri::HTML(doc)
     doc.css('a[href^=http]').each do |link|
       url = link.attributes['href'].value
-      if !allowed_hostnames.empty? && !url.match(Regexp.union(*allowed_hostnames))
-        link.attributes['href'].value = fetch(url)
+      if !allowed_hostnames.empty? && url.match(Regexp.union(*allowed_hostnames))
+        next
       end
+      link.attributes['href'].value = fetch(url)
     end
     doc
   end
