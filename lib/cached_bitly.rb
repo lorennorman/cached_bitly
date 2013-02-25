@@ -53,6 +53,15 @@ module CachedBitly
     @stats_enabled = enabled
   end
 
+  def url_scheme
+    @url_scheme ||= 'http'
+  end
+
+  def url_scheme=(scheme)
+    raise ArgumentError unless ['http', 'https'].include?(scheme)
+    @url_scheme = scheme
+  end
+
   def clean(html)
     clean_doc(html).css('body').inner_html
   end
@@ -74,10 +83,10 @@ module CachedBitly
   #
   # Returns short url, default if save goes wrong.
   def fetch(url, default=url)
-    short_url = shortened url
+    short_url = shortened(url)
     if short_url
       hit!
-      short_url
+      short_url.gsub(/^http\:/, url_scheme + ':')
     else
       miss!
       shorten(url) || default

@@ -65,4 +65,17 @@ class TestCachedBitly < Test::Unit::TestCase
     CachedBitly.redis.expects(:incr).never
     CachedBitly.fetch('https://garrettbjerkhoel.com')
   end
+
+  def test_setting_url_scheme
+    stub_remote_bitly
+    CachedBitly.url_scheme = 'https'
+    assert CachedBitly.save('https://github.com/github', 'http://bit.ly/gzdf13'), 'should save'
+    assert_equal 'https://bit.ly/gzdf13', CachedBitly.fetch('https://github.com/github'), 'should return https version'
+  end
+
+  def test_setting_invalid_url_scheme
+    assert_raises(ArgumentError) {
+      CachedBitly.url_scheme = 'ftp'
+    }
+  end
 end
