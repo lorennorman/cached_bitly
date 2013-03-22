@@ -22,6 +22,22 @@ module CachedBitly
     @redis_namespace = namespace
   end
 
+  def statsd
+    @statsd
+  end
+
+  def statsd=(statsd)
+    @statsd = statsd
+  end
+
+  def statsd_namespace
+    @statsd_namespace ||= 'bitly'
+  end
+
+  def statsd_namespace=(namespace)
+    @statsd_namespace = namespace
+  end
+
   def allowed_hostnames
     @allowed_hostnames ||= []
   end
@@ -46,7 +62,7 @@ module CachedBitly
   end
 
   def stats_enabled
-    @stats_enabled ||= false
+    @stats_enabled ||= !!statsd
   end
 
   def stats_enabled=(enabled)
@@ -85,10 +101,10 @@ module CachedBitly
   def fetch(url, default=url)
     short_url = shortened(url)
     if short_url
-      hit!
+      hit
       short_url.gsub(/^http\:/, url_scheme + ':')
     else
-      miss!
+      miss
       shorten(url) || default
     end
   end
@@ -99,6 +115,7 @@ module CachedBitly
   def shorten(url)
     url = bitly_client.shorten(url)
     if save(url.long_url, url.short_url)
+      bump_total
       url.short_url
     else
       false
@@ -121,22 +138,21 @@ module CachedBitly
     !!redis.hset("#{redis_namespace}:url", digest(long_url), short_url)
   end
 
-  def totals
-    { :hit   => redis.get("#{redis_namespace}:url:hit").to_i,
-      :miss  => redis.get("#{redis_namespace}:url:miss").to_i,
-      :total => redis.hlen("#{redis_namespace}:url") }
-  end
-
   private
 
-  def hit!
+  def hit
     return unless stats_enabled?
-    redis.incr "#{redis_namespace}:url:hit"
+    statsd.increment("#{statsd_namespace}.url.hit")
   end
 
-  def miss!
+  def bump_total
     return unless stats_enabled?
-    redis.incr "#{redis_namespace}:url:miss"
+    statsd.increment("#{statsd_namespace}.url.all")
+  end
+
+  def miss
+    return unless stats_enabled?
+    tatsd.increment("#{statsd_namespace}.url.miss")
   end
 
   def digest(object)
