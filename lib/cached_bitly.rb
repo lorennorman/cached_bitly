@@ -31,7 +31,7 @@ module CachedBitly
   end
 
   def statsd_namespace
-    @statsd_namespace ||= 'bitly'
+    @statsd_namespace ||= redis_namespace
   end
 
   def statsd_namespace=(namespace)
