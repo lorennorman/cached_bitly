@@ -152,7 +152,7 @@ module CachedBitly
 
   def miss
     return unless stats_enabled?
-    tatsd.increment("#{statsd_namespace}.url.miss")
+    statsd.increment("#{statsd_namespace}.url.miss")
   end
 
   def digest(object)
